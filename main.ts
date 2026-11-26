@@ -24,12 +24,16 @@ const OUTPUT_PATH = "/output/entry.txt";
 
 function main(): void {
   // The gate counts characters, so guard the line before writing it:
-  // it must be 1..160 characters and not only white space.
+  // it must be 1..160 characters, not only white space, and a single
+  // line — the judge compares one forecast line against another.
   const line = FORECAST.trim();
   if (line.length < 1 || line.length > 160) {
     throw new Error(
       `forecast must be 1-160 characters, got ${line.length}`,
     );
+  }
+  if (line.includes("\n")) {
+    throw new Error("forecast must be a single line");
   }
   mkdirSync(dirname(OUTPUT_PATH), { recursive: true });
   writeFileSync(OUTPUT_PATH, line + "\n", "utf8");
